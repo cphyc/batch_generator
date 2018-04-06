@@ -24,6 +24,8 @@ setup(
     license=license,
     packages=find_packages(exclude=('tests', 'docs')),
     install_requires=[
+        'appdirs',
+
     ],
     include_package_data=True,
     entry_points={
