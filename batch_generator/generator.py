@@ -15,6 +15,7 @@ DTYPES = {'int': int, 'float': float, 'str': str}
 
 class CmdLineHandler():
     __name__ = 'batch handler'
+
     def __init__(self):
         logging.basicConfig(level=logging.INFO)
         self.log = logging.getLogger(self.__name__)
