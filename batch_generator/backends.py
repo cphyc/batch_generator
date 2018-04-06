@@ -120,7 +120,9 @@ class SlurmBackend(BaseBackend):
             logger.error('sbatch returned %s', result.returncode)
             raise RuntimeError
 
-        job_id = result.stdout.decode('utf-8').replace('\n', '')
+        res = result.stdout.decode('utf-8').replace('\n', '')
+
+        job_id = res.replace('Submitted batch job', '').strip()
 
         return job_id
 
