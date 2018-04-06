@@ -150,7 +150,7 @@ class CmdLineHandler():
         templates = glob(
             path.join(
                 template_dir,
-                '%(backend)s.*' % dict(backend=self.backend)
+                '%(backend)s.*' % dict(backend=self.backend.name)
                 )
             )
 
@@ -158,7 +158,7 @@ class CmdLineHandler():
             errmsg = ('You need to setup a template first.\nTemplates '
                       'are stored in "%s" and have the format "%s".')
             logger.error(errmsg % (template_dir,
-                                     '%s.SOMENAME' % self.backend))
+                                     '%s.SOMENAME' % self.backend.name))
             sys.exit(1)
 
         elif len(templates) == 1:

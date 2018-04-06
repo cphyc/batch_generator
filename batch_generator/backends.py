@@ -12,7 +12,7 @@ def detect_backend():
     # TODO: support multiple backends?
     for name, backend in BACKENDS.items():
         if name:
-            return name
+            return backend
 
     logger.error('No backend found!')
 
