@@ -178,7 +178,7 @@ class CmdLineHandler():
         logger.info('Wrote %s', args.output)
 
     def run(self, args):
-        self.handler.run(args.file)
+        self.backend.run(args.file)
 
     def stat(self, args):
         pass
