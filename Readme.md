@@ -5,7 +5,7 @@ This utility helps creating and submitting jobs on clusters. It also provides a 
 ## Install
 
 ```bash
-git clone <>
+git clone https://github.com/cphyc/batch_generator.git
 pip install .
 ```
 
