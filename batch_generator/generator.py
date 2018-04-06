@@ -1,24 +1,21 @@
-from distutils.spawn import find_executable
-import configparser
 import argparse
 import appdirs
 import os
 from os import path
 from glob import glob
-import logging
 import sys
 import re
+import logging
 
+from .backends import detect_backend
+
+from .log import logger
 TEMPLATE_re = re.compile(r'{{([^}]+)}}')
 DTYPES = {'int': int, 'float': float, 'str': str}
 
 
 class CmdLineHandler():
-    __name__ = 'batch handler'
-
     def __init__(self):
-        logging.basicConfig(level=logging.INFO)
-        self.log = logging.getLogger(self.__name__)
         self.parse_cmd_args()
         self.set_backend()
 
@@ -28,22 +25,16 @@ class CmdLineHandler():
 
         for d in [self.data_dir, self.config_dir]:
             if not path.isdir(d):
-                self.log.debug('Creating directory %s' % d)
+                logger.debug('Creating directory %s' % d)
                 os.makedirs(d)
             else:
-                self.log.debug('Found directory %s' % d)
+                logger.debug('Found directory %s' % d)
 
     def set_backend(self):
         '''Detect and set the backend to use.'''
+        backend = detect_backend()
 
-        if find_executable("qsub"):
-            backend = 'qsub'
-        elif find_executable("sbatch"):
-            backend = 'sbatch'
-        else:
-            backend = 'none'
-
-        self.log.debug('Using backend %s' % backend)
+        logger.debug('Using backend %s' % backend)
 
         self.backend = backend
 
@@ -135,7 +126,7 @@ class CmdLineHandler():
                 answers.append(ans)
                 if store_data:
                     data[name] = ans
-                self.log.debug('Got %s for %s' % (ans, name))
+                logger.debug('Got %s for %s' % (ans, name))
 
         # Not create filled_template
         newLines = []
@@ -166,7 +157,7 @@ class CmdLineHandler():
         if len(templates) == 0:
             errmsg = ('You need to setup a template first.\nTemplates '
                       'are stored in "%s" and have the format "%s".')
-            self.log.error(errmsg % (template_dir,
+            logger.error(errmsg % (template_dir,
                                      '%s.SOMENAME' % self.backend))
             sys.exit(1)
 
@@ -183,6 +174,8 @@ class CmdLineHandler():
 
         with open(args.output, 'w') as f:
             f.write(content)
+
+        logger.info('Wrote %s', args.output)
 
     def run(self, args):
         pass
@@ -217,7 +210,7 @@ class CmdLineHandler():
         args = parser.parse_args()
 
         if args.verbose:
-            self.log.setLevel(logging.DEBUG)
+            logger.setLevel(logging.DEBUG)
 
         self.args = args
 
