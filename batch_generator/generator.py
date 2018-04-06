@@ -178,7 +178,7 @@ class CmdLineHandler():
         logger.info('Wrote %s', args.output)
 
     def run(self, args):
-        pass
+        self.handler.run(args.file)
 
     def stat(self, args):
         pass
@@ -200,7 +200,8 @@ class CmdLineHandler():
 
         run_parser = sparsers.add_parser('run', aliases=['r'],
                                          help='Run a batch job.')
-        # run_parser.add_argument()
+        run_parser.add_argument('file', help='The file to run.')
+
         run_parser.set_defaults(func=self.run)
 
         stat_parser = sparsers.add_parser('stat', aliases=['s'],
