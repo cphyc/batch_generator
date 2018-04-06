@@ -49,8 +49,8 @@ class BaseBackend(object):
         '''Return true if the backend works on the system.'''
         raise NotImplementedError
 
-    def submit(self, fname):
-        '''Customize to submit a file. This should return the id of the job.'''
+    def run(self, fname):
+        '''Customize to run a file. This should return the id of the job.'''
         raise NotImplementedError
 
     def job_status(self, job_id):
@@ -74,7 +74,7 @@ class QsubBackend(BaseBackend):
         logger.debug('Detected backend %s' % cls.name)
         return find_executable('qsub') is not None
 
-    def submit(self, fname):
+    def run(self, fname):
         if not path.exists(fname):
             logger.error('File does not exist.')
             raise FileNotFoundError('%s does not exist')
@@ -111,7 +111,7 @@ class SlurmBackend(BaseBackend):
         logger.debug('Detected backend %s' % cls.name)
         return find_executable('sbatch') is not None
 
-    def submit(self, fname):
+    def run(self, fname):
         if not path.exists(fname):
             logger.error('File does not exist.')
             raise FileNotFoundError('%s does not exist')
